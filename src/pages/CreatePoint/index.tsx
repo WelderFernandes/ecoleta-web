@@ -7,11 +7,11 @@ import { Map, TileLayer, Marker } from 'react-leaflet';
 import api from '../../services/api';
 import axios from 'axios';
 import {LeafletMouseEvent} from 'leaflet';
-
+import { ReactSVG } from 'react-svg'
 
 interface Item {
     id: number;
-    title: string;
+    name: string;
     image_url: string;
 }
 
@@ -229,15 +229,38 @@ const CreatePoint = () => {
                 </fieldset>
                 <fieldset>
                     <legend>
-                        <h2>?tens de coleta</h2>
+                        <h2>Ítens de coleta</h2>
                         <span>Selecione um ou mais itens abaixo</span>
                     </legend>
                     <ul className="items-grid">
                         {items.map(item => (
                             <li className={selectedItem.includes(item.id) ? 'selected' : ''}
                                 key={item.id} onClick={() => hundleSelectedItem(item.id)}>
-                            <img src={item.image_url} alt={item.title} />
-                            <span>{item.title}</span>
+                            {/* <img src={item.image_url} alt={item.name} /> */}
+                            <ReactSVG
+                                    src={item.image_url}
+                                    afterInjection={(error, svg) => {
+                                        if (error) {
+                                        console.error(error)
+                                        return
+                                        }
+                                        console.log(svg)
+                                    }}
+                                    beforeInjection={svg => {
+                                        svg.classList.add('svg-class-name')
+                                    }}
+                                    evalScripts="always"
+                                    fallback={() => <span>Error!</span>}
+                                    loading={() => <span>Loading</span>}
+                                    renumerateIRIElements={false}
+                                    wrapper="span"
+                                    className="wrapper-class-name"
+                                    onClick={() => {
+                                        console.log('wrapper onClick')
+                                    }}
+                                    />
+                            <span>{item.name}</span>
+  
                         </li>
                         ))}
 
